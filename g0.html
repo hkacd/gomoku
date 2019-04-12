@@ -1,0 +1,60 @@
+<html><head><title>tit</title>
+<style>canvas{background:#666666; display:block; margin:0 auto;}</style>
+</head><body>
+<button onclick="B_F1()">先手人</button>
+<button onclick="B_F2()">後手人</button>
+<button onclick="B_F3()">人対人</button>
+<button onclick="B_F4()">両自動</button>
+<div id="i0"></div>
+<canvas id="CI1"width="400px"height="400px"></canvas>
+<script>
+let CE=document.getElementById("CI1");
+let CC=CE.getContext("2d");
+let e0=document.getElementById("i0");
+let 
+PLa=1,
+PLb=1,
+OX=10,WX=20,MX=20,mx,px,WXhan=WX/2,
+OY=10,WY=20,MY=20,my,py,WYhan=WY/2,MMMM=MX*MY;
+let
+PT=[],
+WT=[],
+PLAI=[];
+
+addEventListener("mousedown",(ge)=>{
+ px=ge.pageX-CE.getBoundingClientRect().left-window.pageXOffset;
+ py=ge.pageY-CE.getBoundingClientRect().top-window.pageYOffset;
+ E_L();});
+onload=()=>{B_F1();}
+function E_L(){
+ if(PLAI[PLb]){A_I();}else{U_I();}
+ if(!outmxy(mx,my)){if(0==PT[mx+my*MX]){P_N();P_D();T_A();}}}
+function B_F1(){PLAI[1]=false;PLAI[2]=true;I_N();I_D();}
+function B_F2(){PLAI[1]=true;PLAI[2]=false;I_N();I_D();}
+function B_F3(){PLAI[1]=false;PLAI[2]=false;I_N();I_D();}
+function B_F4(){PLAI[1]=true;PLAI[2]=true;I_N();I_D();}
+function D_X(d){switch(d){case(0):return(0);case(1):return(1);case(2):return(1);case(3):return(1);}}
+function D_Y(d){switch(d){case(0):return(1);case(1):return(0);case(2):return(1);case(3):return(-1);}}
+function outmxy(x,y){if(x<0||MX<=x||y<0||MY<=y){return(true);}return(false);}
+function U_I(){mx=(px-WXhan+OX)/WX;my=(py-WYhan+OY)/WY;mx=parseInt(mx);my=parseInt(my);}
+function A_I(){let rit=-1,rv=-1;for(let it=0;it<MMMM;it++){if(rv<WT[it]){rv=WT[it];rit=it;}}mx=rit%MX;my=parseInt(rit/MX);}
+function C_T(gc,gx,gy){
+ for(let itd=0;itd<4;itd++){let dx=D_X(itd),dy=D_Y(itd),cnt=0;
+ for(let it1=-4,lx=gx-4*dx,ly=gy-4*dy;it1<5;it1++,lx+=dx,ly+=dy){if(outmxy(lx,ly)){cnt=0;}else if(gc==PT[lx+ly*MX]){cnt++;}else{cnt=0;}if(0==PT[lx+ly*MX]){W_T(gc,lx,ly);}else{WT[lx+ly*MX]=-9999;}if(cnt>=5){win(gc);}}}}
+function W_T(gc,gx,gy){let sm=0;
+ for(let itd=0;itd<4;itd++){let dx=D_X(itd),dy=D_Y(itd);
+ for(let it2=-4,lx2=gx-4*dx,ly2=gy-4*dy;it2<1;it2++,lx2+=dx,ly2+=dy){let cnt_e=1,cnt_m=1;
+ for(let it1=0,lx1=lx2,ly1=ly2;it1<5;it1++,lx1+=dx,ly1+=dy){if(outmxy(lx1,ly1)){cnt_e=cnt_m=0;}else if(0==PT[lx1+ly1*MX]){}else if(gc==PT[lx1+ly1*MX]){cnt_m*=5;cnt_e=0;}else{cnt_m=0;cnt_e*=5;}}
+ sm+=cnt_m+cnt_e;}}WT[gx+gy*MX]=sm;}
+function I_N(){for(let itx=0;itx<MX;itx++){for(let ity=0;ity<MY;ity++){PT[itx+ity*MX]=0;}}for(let itx=0;itx<MX;itx++){for(let ity=0;ity<MY;ity++){W_T(1,itx,ity);}}}
+function I_D(){CC.clearRect(0,0,CE.width,CE.height);CC.beginPath();
+ for(let it=0;it<MX;it++){CC.moveTo(OX+it*WX,OY);CC.lineTo(OX+it*WX,OY+(MY-1)*WY);}
+ for(let it=0;it<MY;it++){CC.moveTo(OX,OY+it*WY);CC.lineTo(OX+(MX-1)*WX,OY+it*WX);}
+ CC.stroke();CC.closePath();}
+function P_D(){CC.beginPath();CC.arc(mx*WX+OX,my*WY+OY,WXhan-1,0,2*Math.PI,true);CC.fill();CC.closePath();}
+function P_N(){PT[mx+my*MX]=PLb;C_T(PLb,mx,my);}
+function T_A(){if(PLb==1){PLb=2;CC.fillStyle="rgb(222,222,222)";e0.innerHTML="白の番";}else{PLb=1;CC.fillStyle="rgb(0,0,0)";e0.innerHTML="黒の番";}
+ if(PLAI[PLb]){e0.innerHTML+="。画面クリックで進行";}else{e0.innerHTML+="。置く交差点をクリック";}}
+function win(gc){if(PLb==1){alert("黒の勝ち");}else{alert("白の勝ち");}}
+
+</script></body></html>
